@@ -1,0 +1,86 @@
+{% extends "bookshop/base.html" %}
+{% load static %}
+
+{% block scripts %}
+<script defer src="{% static 'bookshop/index_page_script.js' %}"></script>
+{% endblock scripts %}
+
+{% block homepage %}
+
+  <div class="h-32 w-full bg-gray-100 mb-10">
+    <div class="ad1"></div>
+    <div class="ad2"></div>
+  </div>
+
+  <div class="flex flex-col md:flex-row items-start justify-center md:justify-around    mx-auto rounded-sm shadow-lg px-2 py-3 w-10/12 h-15 ">
+    <div class="flex space-x-4">    
+        <p class="text-gray-500">مرتب سازی:</p>
+        <p class="order_lowest_price_btn text-gray-700 hover:text-green-400 cursor-pointer">کمترین قیمت</p>
+        <p class="order_highest_price_btn text-gray-700 hover:text-green-400 cursor-pointer">بیشترین قیمت</p>
+        <p class="order_newest_btn text-gray-700 hover:text-green-400 cursor-pointer">جدیدترین</p>
+    </div>
+        
+    <div class="flex  mx-auto">
+        <select name="" id="category-select-box" class="mx-auto">
+            <option value="all">------</option>
+            {% for c in book_category  %}
+            <option value={{c.id}} >{{c.name}}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <!-- component -->
+    <div class='max-w-md mx-auto'>
+      <div class="relative flex items-center w-full h-12 rounded-lg shadow-2xl focus-within:shadow-lg bg-white overflow-hidden">
+
+        <div class="grid place-items-center h-full w-12 text-gray-300">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+        </div>
+        
+        <input class="peer h-full w-full outline-none text-sm text-gray-700 pr-2" type="text" id="search"
+        placeholder="جستجوی کتاب" /> 
+      </div>
+    </div>
+  </div>
+
+  <div class="books_container w-10/12 my-8 border border-gray-200 p-2 mx-auto">
+    {% for book in books  %}
+    
+    <div class="flex items-start justify-between max-w-[500px] p-4 mb-6 border border-gray-500 rounded-sm">
+      <a href="{% url 'bookshop:book_detail' book.id %}">
+        <img class="w-[130px] h-[140px] opacity-90 hover:opacity-100  transation-all duration-150" src="{{ book.main_img.url }}" alt="{{ book.title }}">
+      </a> 
+        <div class="ml-10">
+          <a href="{% url 'bookshop:book_detail' book.id %}">
+            <p class="hover:text-gray-600 text-xl font-bold text-gray-800 mb-5  transation-all duration-150">{{ book.title }}</p>
+          </a>
+          <div class="flex justify-end">
+            <p class="mx-2" id="author">{{ book.author }}</p>
+            <label class="text-sm" for="author"> :نویسنده  </label>
+          </div>
+          <div class="flex justify-end">
+            <p class="mx-2" id="category">{{ book.Category }}</p>
+            <label class="text-sm" for="category"> :دسته کتاب </label>
+          </div>
+          <div class="flex justify-end ">
+            <p class="mx-2 font-semibold" id="price"> {{ book.price }}</p>
+            <label class="text-sm " for="price"> :قیمت</label>
+           </div>
+          <button book-id="{{ book.id }}" class="btn_add_to_cart rounded-full border border-gray-200 bg-gray-400 p-1 mx-4 my-3 opacity-80 hover:opacity-100 hover:scale-125  transation-all duration-150">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="white" class="w-5 h-5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" />
+          </button>
+        </div>
+    </div>
+
+    {% endfor %}
+  </div>
+
+  
+
+  <div number-of-pages="{{ books.paginator.num_pages }} "class="pagination_container p-2 mx-auto mb-10 max-w-[350px] flex items-center justify-center bg-sky-100 rounded-lg">
+
+  </div>
+
+{% endblock homepage %}

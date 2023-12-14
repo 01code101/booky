@@ -1,0 +1,88 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    {% csrf_token %}
+    <script defer src="{% static 'bookshop/script.js' %}"></script>
+    {% block scripts %}
+    {% endblock scripts %}
+
+    <title>Booky</title>
+</head>
+
+<body class="relative text-right">
+    <header>
+        <div class="flex flex-col md:flex-row p-6 bg-indigo-900">
+            <div class="flex flex-col items-start w-40 space=y-4">
+            <a href="{% url 'bookshop:home' %}" class="text-xl text-green-500 font-bold mb-3">BOOKY</a>
+            <div class="flex justify-between">
+
+                {% if  user.is_authenticated %}
+                <div class="username-header group relative">
+                    <p class="text-white text-md cursor-pointer">
+                        {{ user.username }}
+                    </p>
+                    <div class="group-hover:block hidden absolute flex items-start justify-center bg-white w-[100px] h-[80px] p-2 shadow-lg rounded-lg">
+                        <a href="{% url 'bookshop:dashborad' %}">
+                            <p class="text-green-500 font-semibold cursor-pointer hover:scale-110 hover:drop-shadow">داشبورد</p>
+                        </a>
+                        <a href="{% url 'bookshop:logout' %}">
+                            <p class="text-red-500 font-semibold cursor-pointer hover:scale-105 hover:drop-shadow">خروج</p>
+                        </a>
+                    </div>
+                </div>
+                {% else %}
+                
+                <p class="text-gray-200 font-semibold">
+                    <a href="{% url 'bookshop:login' %}" class="hover:text-green-300">ورود</a>
+                    <span class="cursor-none">/</span>
+                    <a href="{% url 'bookshop:signup' %}" class="hover:text-green-300">عضویت</a>
+                </p>
+                {% endif %}
+                
+             
+
+                <div class=" ml-3 cursor-pointer cart_container">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="white" class="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" />
+                    </svg> 
+                    <div class="cart_item_container transation-all duration-200 hidden absolute z-10 left-0 flex flex-col items-start justify-start mx-5 my-3 shadow-xl rounded-md bg-white">
+                       
+                    </div>                 
+                </div>
+            </div>
+            </div>
+
+            <nav></nav>
+        </div>
+    </header>
+
+    <main class="">
+        <p class="test"></p>
+        {% block login %}
+        {% endblock login %}
+        {% block signup %}
+        {% endblock signup %}
+        {% block homepage %}
+        {% endblock homepage %}
+        {% block book_detail %}
+        {% endblock book_detail %}
+        {% block dashboard_page %}
+        {% endblock dashboard_page %}
+    </main>
+
+    <footer class="p-6 bg-indigo-500 flex flex-col justify-center items-center mt-[450px]">
+        <p class="text-md text-white font-semibold"> این سایت  تنها جنبه آموزشی دارد </p>
+        <p class="text-xl text-white">
+             توسعه داده شده توسط 
+             <a href="" class="font-bold text-green-500 drop-shadow">
+                 مصطفی صالح 
+             </a>
+            </p>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,26 @@
+{% extends "bookshop/base.html" %}
+
+{% block login %}
+<form method="POST" class="flex flex-col w-[400px] p-4 mx-auto mt-10 rounded border border-rose-300">
+  {% csrf_token  %}
+<div class="flex justify-between">
+  <label for="username_email">نام کاربری یا ایمیل: </label>
+  <input class="bg-green-100 border-gray-200 text-gray-600 mb-3 p-1"  type="text" id="username_email" name="username_email">
+</div>
+
+<div class="flex justify-between">
+  <label for="password">رمز عبور: </label>
+  <input class="border-2 border-gray-200 text-gray-600 mb-3 p-1" type="password" id="password" name="password">
+
+</div>
+
+<button type="submit" class="mt-2 mx-auto p-2 bg-indigo-400 hover:bg-indigo-500 hover:text-green-300 w-20 text-white rounded active:bg-indigo-900">ثبت نام</button>
+
+{% if message %}
+<p class="text-yellow-500 font-semibold">  
+  {{ message }}
+</p>
+{% endif %}
+
+</form>
+{% endblock login %}

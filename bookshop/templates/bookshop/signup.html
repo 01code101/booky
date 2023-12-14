@@ -1,0 +1,44 @@
+{% extends "bookshop/base.html" %}
+{% load static %}
+
+{% block scripts %}
+  <script defer src="{% static 'bookshop/signup_page_script.js' %}"></script>
+{% endblock scripts %}
+
+
+{% block signup %}
+<form method="POST" action=""  class="signup_form flex flex-col w-80 p-4 mx-auto mt-10 rounded border border-rose-300">
+  
+        {% csrf_token  %}
+
+    <div class="flex justify-between">
+        <label for="username">نام کاربری: </label>
+        <input class="border-2 border-gray-200 text-gray-600 mb-3 p-1"  type="text" id="username" name="username">
+    </div>
+    <div class="flex justify-between">
+        <label for="email">ایمیل: </label>
+        <input class="border-2 border-gray-200 text-gray-600 mb-3 p-1" type="email" id="email" name="email">
+    </div>
+    <div class="flex justify-between">
+        <label for="password">رمز عبور: </label>
+        <input class="border-2 border-gray-200 text-gray-600 mb-3 p-1" type="password" id="password" name="password">
+
+    </div>
+    <div class="flex justify-between">
+        <label for="password2">تکرار رمز عبور: </label>
+        <input class="border-2 border-gray-200 text-gray-600 mb-3 p-1" type="password" id="password2" name="password2">
+    </div>
+
+
+    <button onclick="event.preventDefault();" class="btn_signup_form mb-4 mx-auto p-2 bg-indigo-400 hover:bg-indigo-500 hover:text-green-300 w-20 text-white rounded active:bg-indigo-900">ثبت نام</button>
+
+    <div class="message_container">
+
+    </div>
+    <!-- {% if error_message %}
+    {% for error in error_message  %}
+    <p class="text-red-500"> {{ error }} </p>
+    {% endfor %}
+    {% endif %} -->
+</form>
+{% endblock signup %}

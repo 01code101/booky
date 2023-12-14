@@ -1,0 +1,248 @@
+{% extends "bookshop/base.html" %}
+{% load static %}
+
+{% block scripts %}
+<script defer src="{% static 'bookshop/dashboard_page_script.js' %}"></script>
+{% endblock scripts %}
+
+
+{% block dashboard_page %}
+
+    <div class="header_user_info_container p-8 flex gap-3 text-right justify-end items-center mb-6">
+        <div class="flex flex-col text-md text-gray-800">
+            <p class="font-bold drop-shadow">  {{ user.username }}  </p>
+            <p>  {{ user.email }}  </p>
+        </div>
+        <svg class="w-[70px] h-[70px] stroke-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" >
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+        </svg>
+    </div>
+
+    <div class=" tab_box relative p-3 border-t-2 border-indigo-200">
+        <!-- scale-y-[1.16] -translate-y-[3px] bg-indigo-600 <<<when a tab is selected-->
+        <p class="order-tab absolute top-[-35px] right-5 text-white p-1 rounded-t-lg border-2 border-indigo-600
+        bg-indigo-400 cursor-pointer hover:font-semibold hover:bg-indigo-600 transation-all duration-200 select-none 
+        scale-y-[1.16] -translate-y-[3px] bg-indigo-600">سفارشات</p>
+        <p class="wishlist-tab absolute top-[-35px] right-[95px] text-white p-1 rounded-t-lg border-2 border-indigo-600
+        bg-indigo-400 cursor-pointer hover:font-semibold hover:bg-indigo-600 transation-all duration-200  select-none ">علاقه مندی ها</p>
+        <p class="customer-tab absolute top-[-35px] right-[200.5px] text-white p-1 rounded-t-lg border-2 border-indigo-600
+        bg-indigo-400  cursor-pointer hover:font-semibold hover:bg-indigo-600 transation-all duration-200 select-none ">اطلاعات مشتری</p>
+        <p  class="password-tab absolute top-[-35px] right-[317.3px] text-white p-1 rounded-t-lg border-2 border-indigo-600
+        bg-indigo-400 cursor-pointer hover:font-semibold hover:bg-indigo-600 transation-all duration-200 select-none ">تغییر رمز</p>
+
+
+    <section class="orders-section relative flex flex-col w-full items-end p-4 text-right">
+    
+        <div class="orderitems-box">
+            {% for item in ordersitems  %}
+            <div class="flex flex-row-reverse mb-2 items-center min-w-[450px]  justify-around text-gray-800 rounded-lg shadow-sm border-b-2 border-indigo-300 p-2">
+                <div class="">
+                    <p class="mb-1 font-semibold text-indigo-700">{{item.book.title}}</p>
+                    <p class="text-sm">{{item.book.author}}</p>
+                </div>
+                <p class="">
+                    <span class="text-xs font-semibold">تعداد</span>
+                <span class="font-bold text-indigo-900">{{ item.quantity }}</span>
+            </p>
+            <p >
+                <span class="text-[8px] font-semibold">قیمت هر کتاب</span>
+                {{item.price}}
+            </p>
+            </div>
+            {% endfor %}
+
+            <p class="p-2 rounded-lg mr-4 border-b-4 shadow-sm border-indigo-600 hover:border-t-4 hover:border-b-0 duration-150 transation-all select-none">
+                <span class="font-semibold ml-2 text-sm text-gray-500">قیمت کل:</span>
+                <span class="font-bold drop-shadow text-gray-800">{{ total_price }}</span>
+            </p>
+        </div>
+
+        <p class="text-md text-gray-700 font-semibold mt-10 mb-3">
+            آدرس ها
+        </p>
+
+        <div class="adresses-box p-2 min-w-[422px] flex flex-col items-end gap-2 rounded-lg shadow-lg bg-gray-100 border-1 border-gray-200">
+            {% if addresses  %}
+            {% for ad in addresses %}
+                <div id="{{ ad.id }}" class="address-{{ forloop.counter }} cursor-pointer bg-white p-2 rounded-lg max-w-[330px] border-2 border-white hover:border-indigo-600 transation-all duration-500">
+                <p class="flex flex-col items-end text-right gap-2">
+                    <span>
+                        <span class="text-sm ml-2">استان:</span> {{ ad.city }}
+                    </span>
+                    <span class="text-sm">
+                        {{ ad.address_line1 }}
+                    </span>
+                    <span class="text-sm">
+                        <span class="text-sm ml-2">کدپستی:</span> {{ ad.zipcode }}
+                    </span>
+                </p>
+                </div>
+            {% endfor %}
+
+            {% else %}
+              <p class="p-3 text-white bg-gray-200">لطفا از بخش اطلاعات آدرس خود را وارد نماید</p>
+            {% endif %}
+
+        </div>
+        <button class="btn-submit-order px-6 py-2 mt-6 bg-green-400 text-white text-bold animate-pulse hover:scale-110 hover:animate-none rounded-lg
+        transation-all duration-500">
+            ثبت سفارش
+        </button>
+
+        <div class="factor-box hidden absolute right-1/2 z-10
+         p-6 rounded-lg shadow-lg text-gray-500">
+            <p class="mx-auto mb-6 text-lg font-bold">
+                فاکتور خرید
+            </p>
+            <p class="p-1">
+                <span class="factor-order-number mx-2 font-semibold"></span>
+                <span>:شماره سفارش</span>
+            </p>
+            <p class="p-1">
+                <span>نام</span>
+                <span class="factor-fullname mx-2 font-semibold"></span>
+            </p>
+            <p class="p-1">
+                <span class="factor-phone-number mx-2 font-semibold"></span>
+                <span>:شماره تماس</span>
+            </p>
+            <p class="p-1">
+                <span>: آدرس</span>
+                <br>
+                <span class="factor-address"></span>
+            </p>
+            <p class="p-1">
+                <span class="factor-zipcode mx-2 font-semibold"></span>
+                <span>:کدپستی</span>
+            </p>
+            <div class="factor-item-grid grid grid-cols-3 my-3 border gap-x-4 border-gray-800 p-2 rounded-md items-center justify-center">  
+                <p class="font-bold border-b">قیمت</p>
+                <p class="font-bold border-b">تعداد</p>
+                <p class="font-bold border-b">کتاب</p>
+
+            </div>
+            <p class="mb-3">
+                <span class="factor-total-price mx-2 font-semibold"></span>
+                <span>:قیمت کل</span>
+            </p>
+            <p>
+                <span>وضعیت سفارش</span>
+                <span class="factor-order-status mx-2 font-semibold"></span>
+                <br>
+                <br>
+                <button class="factor-btn-pay bg-indigo-400 px-2 py-1 mx-2 rounded-md text-white hover:bg-indigo-600 hover:font-bold">پرداخت کنید</button>
+            </p>
+
+
+        </div>
+    </section>
+
+    <section class="wishlist-section hidden p-3">
+
+            {% for item in wishitems  %}
+                <div class="flex flex-row mb-2 items-center bg-sky-100 min-w-[450px] max-w-[600px] gap-4  justify-end mx-auto text-gray-800 rounded-lg shadow-sm border-b-2 border-sky-400 p-2">
+            <div class="">
+                <a href="{% url 'bookshop:book_detail' item.object_id %}">
+                    <p class="mb-1 font-semibold text-sky-700">{{item.content_object.title}}</p>
+                </a>
+                <p class="text-sm">{{item.content_object.author}}</p>
+            </div>
+            <svg class="w-7 h-7 fill-sky-500 " xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"  >
+                <path stroke-linecap="round" stroke-linejoin="round" d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0111.186 0z" />
+            </svg> 
+            </div>
+            {% endfor %}
+
+    </section>
+
+    <section class="customer-section hidden p-3 flex justify-end">
+        <form action="">
+            
+            <div class="info-box flex flex-col max-w-[300px]  text-right text-gray-600 ">
+                    
+                    <div class="flex justify-between mb-4">
+                        <input class="text-right border border-gray-400 rounded-sm p-1 mx-2" value="{{user.first_name}}"  required maxlength="40" type="text" name="" id="first-name">
+                        <label class="font-semibold" for="first-name" id="info-label">:نام</label>
+                    </div>
+                    <div class="flex justify-between mb-4">
+                        <input class=" text-right border border-gray-400 rounded-sm p-1 mx-2" value="{{user.last_name}}" required maxlength="40"  type="text" name="" id="last-name">
+                        <label  for="last-name" id="info-label">:نام خانوادگی </label>
+                    </div>
+                    <div class="flex justify-between mb-4">
+                        <input class=" text-right border border-gray-400 rounded-sm p-1 mx-2" value="{{user.username}}"  required maxlength="40" type="text" name="" id="username">
+                        <label for="username" id="info-label">:نام کاربری </label>
+                    </div>
+                    <div class="flex justify-between mb-4">
+                        <input class=" text-right border border-gray-400 rounded-sm p-1 mx-2" value="{{phone_number}}"  required maxlength="20" type="number"  name="" id="phone-number">
+                        <label for="phone-number" id="info-label">:شماره تماس </label>
+                    </div>
+                
+                
+                    <div class="flex flex-col sm:flex-row sm:flex-row-reverse items-end gap-2">
+                        <!-- address 1 -->
+                        <div id="{{ada}}" class="address1-box pr-6 border border-green-400 rounded-md">
+                                <div class="flex justify-end  mb-2">
+                                    <select class="p-1" name="" id="city1">
+                                        <option value='null'>------</option>
+                                        {% for city in cities  %}
+                                    <option {% if addresses.0.city.id == city.id %}
+                                      selected
+                                    {% endif %} value="{{city.id}}">{{city.name}}</option>
+                                    {% endfor %}
+                                </select>
+                                <label class="ml-16" for="city1">:شهر</label>
+                            </div>
+                            <div class="flex justify-between mb-2">
+                                <textarea class=" text-sm text-right border border-gray-400 rounded-sm p-1 mx-2"
+                                  placeholder="شهر - محله/شهرک - خیابان/میدان - کوچه - پلاک/بلوک - واحد - طبقه"
+                                   required id="address1" cols="25" rows="5">{{addresses.0.address_line1}}</textarea>
+                                <label for="address1">:1 آدرس </label>
+                            </div>
+                            <div class="flex justify-between mb-2">
+                                <input class=" text-right border border-gray-400 rounded-sm p-1 mx-2" value="{{addresses.0.zipcode}}"  required maxlength="20" type="number" name="" id="zipcode1">
+                                <label for="zipcode1">:1کدپستی </label>
+                            </div>                  
+                        </div>
+
+                        <!-- address 2 -->
+                        <div id="{{adb}}"  class="address2-box pr-6 border border-gray-200 rounded-md ">
+                            <div class="flex justify-end  mb-4">
+                                <select class="p-1" name="" id="city2">
+                                    <option value='null'>------</option>
+                                    {% for city in cities  %}
+                                    <option {% if addresses.1.city.id == city.id %}
+                                    selected
+                                  {% endif %} value="{{city.id}}">{{city.name}}</option>
+                                    {% endfor %}
+                                </select>
+                                <label class="ml-16" for="city2">:شهر</label>
+                            </div>
+                            <div class="flex justify-between mb-4">
+                                <textarea class=" text-sm text-right border border-gray-400 rounded-sm p-1 mx-2"
+                                  placeholder="شهر - محله/شهرک - خیابان/میدان - کوچه - پلاک/بلوک - واحد - طبقه"
+                                   id="address2" cols="25" rows="5">{{addresses.1.address_line1}}</textarea>
+                                <label for="address2">:2 آدرس </label>
+                            </div>
+                            <div class="flex justify-between mb-4">
+                                <input class=" text-right border border-gray-400 rounded-sm p-1 mx-2" value="{{addresses.1.zipcode}}"  maxlength="20" type="number" name="" id="zipcode2">
+                                <label for="zipcode2">:2کدپستی </label>
+                            </div>
+                        </div>
+
+                </div>
+                
+                <input class="btn-form-submit text-white 
+                mt-8 font-bold px-6 mr-5 rounded-md py-2 bg-indigo-600 border border-indigo-600 hover:border-green-400 hover:opacity-95 transation-all duration-200 hover:shadow-xl" value="ذخیره" type="submit" onclick="event.preventDefault();">
+                <p class="message-p hidden text-gray-500 p-2 drop-shadow transation-all duration-200"></p>
+            </form>
+    </section>
+
+    <section class="password-section hidden p-3">
+        
+    </section>
+    
+    
+</div>
+
+
+{% endblock dashboard_page %}
